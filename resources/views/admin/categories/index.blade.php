@@ -1,11 +1,11 @@
 @extends('adminlte::page')
-@section('title', 'Admin Panel')
+@section('title', 'Dashboard')
 
 @section('content_header')
 @can('admin.categories.create')
-    <a href="{{ route('admin.categories.create') }}" class="btn btn-secondary btn-sm float-right">Add category</a>
+    <a href="{{ route('admin.categories.create') }}" class="btn btn-secondary btn-sm float-right">{{ __('Add category') }}</a>
 @endcan
-    <h1>Categories list</h1>
+    <h1>{{ __('Categories list') }}</h1>
 @stop
 
 @section('content')
@@ -21,7 +21,7 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Name</th>
+                        <th>{{ __('Name') }}</th>
                         <th colspan="2"></th>
                     </tr>
                 </thead>
@@ -33,7 +33,7 @@
                             <td width="10px">
                                 @can('admin.categories.edit')
                                     <a href="{{ route('admin.categories.edit', $category) }}"
-                                        class="btn btn-primary btn-sm">Edit</a>
+                                        class="btn btn-primary btn-sm">{{ __('Edit') }}</a>
                                 @endcan
                         </td>
                         <td width="10px">
@@ -42,7 +42,7 @@
                                     @csrf
                                     @method('delete')
 
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">{{ __('Delete') }}</button>
                                 </form>
                             @endcan
                         </td>

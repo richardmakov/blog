@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class TagController extends Controller
 {
@@ -19,9 +20,12 @@ class TagController extends Controller
 
     public function index()
     {
-        $tags = Tag::all();
 
-        return view('admin.tags.index', compact('tags'));
+        $tags = Http::get('http://blog.test/api/obtener-tags');
+        $datos = json_decode($tags->getBody(), true);
+        
+        return view('admin.tags.index', ['tags' => $datos]);
+       
     }
 
     public function create()
@@ -36,7 +40,7 @@ class TagController extends Controller
             'purple' => 'Purple',
             'pink' => 'Pink',
             'gray' => 'Gray'
-            
+
         ];
 
         return view('admin.tags.create', compact('colors'));
@@ -51,11 +55,11 @@ class TagController extends Controller
         ]);
 
         $tag = Tag::create($request->all());
-        
-        return redirect()->route('admin.tags.edit', compact('tag'))>with('info','The tag was created successfully');
+
+        return redirect()->route('admin.tags.edit', compact('tag')) > with('info', 'The tag was created successfully');
     }
 
-    public function edit(Tag $tag)
+    public function edit($id)
     {
 
         $colors = [
@@ -67,8 +71,17 @@ class TagController extends Controller
             'purple' => 'Purple',
             'pink' => 'Pink',
             'gray' => 'Gray'
-            
+
         ];
+
+        $tags = Tag::all();
+
+        $tag = null;
+        foreach ($tags as $tagf) {
+            if ($tagf->id == $id) {
+                $tag = $tagf;
+            }
+        }
 
         return view('admin.tags.edit', compact('tag', 'colors'));
     }
@@ -83,14 +96,23 @@ class TagController extends Controller
 
         $tag->update($request->all());
 
-        return redirect()->route('admin.tags.edit', $tag)->with('info','The tag was updated successfully');
-        
+        return redirect()->route('admin.tags.edit', $tag)->with('info', 'The tag was updated successfully');
     }
 
-    public function destroy(Tag $tag)
+    public function destroy($id)
     {
+
+        $tags = Tag::all();
+
+        $tag = null;
+        foreach ($tags as $tagf) {
+            if ($tagf->id == $id) {
+                $tag = $tagf;
+            }
+        }
+
         $tag->delete();
 
-        return redirect()->route('admin.tags.index')->with('info','The tag was deleted successfully');
+        return redirect()->route('admin.tags.index')->with('info', 'The tag was deleted successfully');
     }
 }

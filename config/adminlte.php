@@ -342,6 +342,12 @@ return [
         
         ['header' => 'BLOG OPTIONS'],
         [
+            'text'       => 'All Posts',
+            'route' => 'admin.posts.show',
+            'icon' => 'fas fa-fw fa-clipboard',
+            'can' => 'admin.posts.show'
+        ],
+        [
             'text'       => 'Post list',
             'route' => 'admin.posts.index',
             'icon' => 'fas fa-fw fa-clipboard',

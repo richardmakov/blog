@@ -17,8 +17,6 @@ class RolSeeder extends Seeder
         $role1 = Role::create(['name' => 'admin']);
         $role2 = Role::create(['name' => 'editor']);
         $role3 = Role::create(['name' => 'writer']);
-        $role4 = Role::create(['name' => 'subscriber']);   
-        $role5 = Role::create(['name' => 'visitor']);
 
         Permission::create(['name' => 'admin.home'])->syncRoles([$role1, $role2, $role3]);
 
@@ -40,6 +38,8 @@ class RolSeeder extends Seeder
         Permission::create(['name' => 'admin.posts.create'])->syncRoles([$role1, $role2, $role3]);
         Permission::create(['name' => 'admin.posts.edit'])->syncRoles([$role1, $role2, $role3]);
         Permission::create(['name' => 'admin.posts.destroy'])->syncRoles([$role1, $role2, $role3]);
+        
+        Permission::create(['name' => 'admin.posts.show'])->syncRoles([$role2, $role1]);
 
     }
 }

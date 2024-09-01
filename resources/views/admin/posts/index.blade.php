@@ -1,11 +1,11 @@
 @extends('adminlte::page')
-@section('title', 'Admin Panel')
+@section('title', 'Dashboard')
 
 @section('content_header')
 
-    <a href="{{ route('admin.posts.create') }}" class="btn btn-secondary float-right">Create new post</a>
+    <a href="{{ route('admin.posts.create') }}" class="btn btn-secondary float-right">{{ __('Create new post') }}</a>
 
-    <h1>Post List</h1>
+    <h1>{{ __('Post List') }}</h1>
 @stop
 
 @section('content')
@@ -16,4 +16,3 @@
     @endif
     @livewire('admin.posts-index')
 @stop
-

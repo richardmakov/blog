@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\IdiomaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Models\Post;
+use App\Http\Controllers\LocaleController;
+
+
 
 Route::get('/', [PostController::class, 'index'])->name('posts.index');
 
@@ -25,3 +29,5 @@ Route::middleware([
 });
 
 Route::get('feed', [PostController::class, 'feed']);
+
+Route::get('/cambiar-idioma/{idioma}', [IdiomaController::class, 'cambiarIdioma'])->name('cambiar-idioma');

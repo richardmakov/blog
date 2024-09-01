@@ -1,13 +1,16 @@
 @extends('adminlte::page')
-@section('title', 'Admin Panel')
+@section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Create new post</h1>
+    <h1>{{ __('Create new post') }}</h1>
 @stop
 
 @section('content')
-
-
+    @if (session('info'))
+        <div class="alert alert-success">
+            <strong>{{ session('info') }}</strong>
+        </div>
+    @endif
     <div class="card">
         <div class="card-body">
             {!! Form::open(['route' => 'admin.posts.store', 'autocomplete' => 'off', 'files' => true]) !!}

@@ -7,11 +7,12 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Tag;
-
 use Illuminate\Support\Facades\Storage;
-
 use App\Http\Requests\PostRequest;
-use Illuminate\Contracts\Cache\Store;
+use Illuminate\Support\Facades\DB;
+
+
+
 
 class PostController extends Controller
 {
@@ -22,6 +23,7 @@ class PostController extends Controller
         $this->middleware('can:admin.posts.create')->only('create', 'store');
         $this->middleware('can:admin.posts.edit')->only('edit', 'update');
         $this->middleware('can:admin.posts.destroy')->only('destroy');
+        $this->middleware('can:admin.posts.show')->only('show', 'edit', 'update', 'destroy');
     }
 
     public function index()
@@ -35,7 +37,7 @@ class PostController extends Controller
         $categories = Category::pluck('name', 'id');
         $tags = Tag::all();
 
-        return view('admin.posts.create', compact('categories', 'tags'));
+        return view('admin.posts.create', compact('categories', 'tags'))->with('info', 'The post was created successfully');;
     }
 
     public function store(PostRequest $request)
@@ -45,68 +47,100 @@ class PostController extends Controller
 
         $post = Post::create($request->all());
 
-        if($request->file('file')){
-           $url = Storage::put('posts', $request->file('file'));
+        if ($request->file('file')) {
+            $url = Storage::put('posts', $request->file('file'));
 
-           $post->image()->create([
+            $post->image()->create([
                 'url' => $url
-           ]);
-        }
-    
-        if($request->tags){
-            $post->tags()->attach([1,2,3]);
+            ]);
         }
 
-        return redirect()->route('admin.posts.edit', $post); 
+        if ($request->tags) {
+            $post->tags()->attach([1, 2, 3]);
+        }
 
+        return redirect()->route('admin.posts.edit', $post);
     }
 
     public function edit(Post $post)
     {
+        $user = auth()->user();
+        if ($this->userHasRole($user->id, 'editor') || $this->isAuthor($user->id, $post->id)) {
+            $categories = Category::pluck('name', 'id');
+            $tags = Tag::all();
 
-        $this-> authorize('author', $post);
-
-        $categories = Category::pluck('name', 'id');
-        $tags = Tag::all();
-
-        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
+            return view('admin.posts.edit', compact('post', 'categories', 'tags'));
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
     }
+
 
     public function update(PostRequest $request, Post $post)
     {
 
-        $this-> authorize('author', $post);
+        $user = auth()->user();
+        if ($this->userHasRole($user->id, 'editor') || $this->isAuthor($user->id, $post->id)) {
 
-        $post->update($request->all());
+            $post->update($request->all());
 
-        if($request->file('file')){
-            $url = Storage::put('posts', $request->file('file'));
+            if ($request->file('file')) {
+                $url = Storage::put('posts', $request->file('file'));
 
-            if($post->image){
-                Storage::delete($post->image->url);
+                if ($post->image) {
+                    Storage::delete($post->image->url);
 
-                $post->image->update([
-                    'url' => $url
-                ]);
-            }else{
-                $post->image()->create([
-                    'url' => $url
-                ]);
+                    $post->image->update([
+                        'url' => $url
+                    ]);
+                } else {
+                    $post->image()->create([
+                        'url' => $url
+                    ]);
+                }
             }
-        }
 
-        if($request->tags){
-            $post->tags()->sync($request->tags);
+            if ($request->tags) {
+                $post->tags()->sync($request->tags);
+            }
+            return redirect()->route('admin.posts.edit', $post)->with('info', 'The post was updated successfully');
+        } else {
+            abort(403, 'Unauthorized action.');
         }
-        return redirect()->route('admin.posts.edit', $post)->with('info', 'The post was updated successfully');
     }
 
     public function destroy(Post $post)
     {
-        $this-> authorize('author', $post);
+        $user = auth()->user();
+        if ($this->userHasRole($user->id, 'editor') || $this->isAuthor($user->id, $post->id)) {
+            $post->delete();
 
-        $post->delete();
+            return redirect()->route('admin.posts.index')->with('info', 'The post was deleted successfully');
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
+    }
+    
+    public function show()
+    {
+        return view('admin.posts.show');
+    }
 
-        return redirect()->route('admin.posts.index')->with('info', 'The post was deleted successfully');
+    protected function userHasRole($userId, $role)
+    {
+        return DB::table('model_has_roles')
+            ->where('model_id', $userId)
+            ->where('model_type', 'App\\Models\\User')
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->where('roles.name', $role)
+            ->exists();
+    }
+
+    protected function isAuthor($userId, $postId)
+    {
+        return DB::table('posts')
+            ->where('id', $postId)
+            ->where('user_id', $userId)
+            ->exists();
     }
 }

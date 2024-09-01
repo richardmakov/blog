@@ -12,8 +12,8 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Name</th>
-                            <th>Mail</th>
+                            <th>{{ __('Name') }}</th>
+                            <th>{{ __('Email') }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -24,7 +24,7 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td width= "10px">
-                                    <a class="btn btn-primary" href="{{ route('admin.users.edit', $user) }}">Edit</a>
+                                    <a class="btn btn-primary" href="{{ route('admin.users.edit', $user) }}">{{ __('Edit') }}</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -38,7 +38,7 @@
         @else
             
             <div class="card-body">
-                <strong>User no exist</strong>
+                <strong>{{ __('User no exist') }}</strong>
             </div>
             
         @endif

@@ -1,8 +1,8 @@
 @extends('adminlte::page')
-@section('title', 'Admin Panel')
+@section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Create Tag</h1>
+    <h1>{{ __('Create Tag') }}</h1>
 @stop
 
 @section('content')

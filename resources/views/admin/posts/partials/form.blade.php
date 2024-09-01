@@ -30,7 +30,7 @@
 </div>
 
 <div class="form-group">
-    <p class="font-weight-bold">Tags</p>
+    <p class="font-weight-bold">{{ __('Tags') }}</p>
 
     @foreach ($tags as $tag)
         <label class="mr-2">
@@ -46,15 +46,15 @@
 </div>
 
 <div class="form-group">
-    <p class="font-weight-bold">Status</p>
+    <p class="font-weight-bold">{{ __('Status') }}</p>
 
     <label class="mr-2">
         {!! Form::radio('status', 1, true) !!}
-        Draft
+        {{ __('Draft') }}
     </label>
     <label>
         {!! Form::radio('status', 2) !!}
-        Published
+        {{ __('Published') }}
     </label>
 
     @error('status')
@@ -88,7 +88,7 @@
             @enderror
         </div>
 
-        <p>Requirements</p>
+        <p>{{ __('Requirements') }}</p>
     </div>
 </div>
 

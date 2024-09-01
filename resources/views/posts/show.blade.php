@@ -29,7 +29,7 @@
             </div>
 
             <aside>
-                <h1 class="text-2xl font-bold text-gray-600 mb-4">Más en {{ $post->category->name }}</h1>
+                <h1 class="text-2xl font-bold text-gray-600 mb-4">{{ __('More in') }} {{ $post->category->name }}</h1>
 
                 <ul>
                     @foreach ($similares as $similar)

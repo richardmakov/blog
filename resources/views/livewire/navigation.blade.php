@@ -24,7 +24,8 @@
 
             <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <a href="/" class="flex flex-shrink-0 items-center">
-                    <img class="w-16 h-16 transition-transform transform hover:scale-110" src="{{ asset('logo.png') }}" alt="Aviation Blog">
+                    <img class="w-16 h-16 transition-transform transform hover:scale-110" src="{{ asset('logo.png') }}"
+                        alt="Aviation Blog">
                 </a>
                 <div class="hidden m-auto sm:ml-6 sm:block">
                     <div class="flex space-x-4">
@@ -43,7 +44,7 @@
             @auth
                 <div class=" inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
-                    <button type="button"
+                    {{--  <button type="button"
                         class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <span class="absolute -inset-1.5"></span>
 
@@ -52,7 +53,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                         </svg>
-                    </button>
+                    </button> --}}
+                    <a href="{{ route('cambiar-idioma', 'es') }}" class="block px-2 py-1 text-sm transition duration-250 ease-in text-white hover:bg-blue-500 rounded-md mr-2">ES</a>
+                    <a href="{{ route('cambiar-idioma', 'en') }}" class="block px-2 py-1 text-sm transition duration-250 ease-in text-white hover:bg-blue-500 rounded-md mr-2">EN</a>
+
 
                     <!-- Profile dropdown -->
                     <div class="relative ml-3" x-data="{ open: false }">
@@ -74,27 +78,31 @@
                             {{-- <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a> --}}
 
-                            @can('admin.home')
+                            
                                 <a href="{{ route('admin.home') }}" class="block px-4 py-2 text-sm text-gray-700"
-                                    role="menuitem" tabindex="-1" id="user-menu-item-0">Dashboard</a>
-                            @endcan
-
+                                    role="menuitem" tabindex="-1" id="user-menu-item-0">{{ __('Dashboard') }}</a>
+                           
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
                                 <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700"
                                     role="menuitem" tabindex="-1" id="user-menu-item-2"
-                                    @click.prevent="$root.submit();">Sign out</a>
+                                    @click.prevent="$root.submit();">{{ __('Sign out') }}</a>
                             </form>
                         </div>
                     </div>
 
                 </div>
             @else
+            <a href="{{ route('cambiar-idioma', 'es') }}" class="block px-2 py-1 text-sm transition duration-250 ease-in text-white hover:bg-blue-500 rounded-md mr-2">ES</a>
+                    <a href="{{ route('cambiar-idioma', 'en') }}" class="block px-2 py-1 text-sm transition duration-250 ease-in text-white hover:bg-blue-500 rounded-md mr-2">EN</a>
                 <div class="flex flex-row">
-                    <a href="{{ route('login') }}" class=" block px-4 py-2 text-sm transition duration-250 ease-in text-white hover:bg-blue-500 rounded-md mr-2"
-                        id="user-menu-item-2">Login</a>
-                    <a href="{{ route('register') }}" class="block px-4 py-2 text-sm transition duration-250 ease-in text-white hover:bg-blue-500 rounded-md"
-                        id="user-menu-item-2">Register</a>
+                    
+                    <a href="{{ route('login') }}"
+                        class=" block px-4 py-2 text-sm transition duration-250 ease-in text-white hover:bg-blue-500 rounded-md mr-2"
+                        id="user-menu-item-2">{{ __('Login') }}</a>
+                    <a href="{{ route('register') }}"
+                        class="block px-4 py-2 text-sm transition duration-250 ease-in text-white hover:bg-blue-500 rounded-md"
+                        id="user-menu-item-2">{{ __('Register') }}</a>
                 </div>
             @endauth
         </div>

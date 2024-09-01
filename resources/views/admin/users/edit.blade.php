@@ -1,8 +1,8 @@
 @extends('adminlte::page')
-@section('title', 'Admin Panel')
+@section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Assign rol</h1>
+    <h1>{{ __('Assign rol') }}</h1>
 @stop
 
 @section('content')
@@ -15,15 +15,15 @@
     
     <div class="card">
         <div class="card-body">
-            <p class="h5">Name:</p>
+            <p class="h5">{{ __('Name') }}:</p>
             <p class="form-control">{{$user->name}}</p>
 
-            <h2 class="h5">Rol list</h2>
+            <h2 class="h5">{{ __('Rol list') }}</h2>
             {!! Form::model($user, ['route' => ['admin.users.update', $user], 'method' => 'put']) !!}
                 @foreach ($roles as $role)
                     <div>
                         <label>
-                            {!! Form::checkbox('$roles[]', $role->id, null, ['class' => 'mr-1']) !!}
+                            {!! Form::checkbox('roles[]', $role->id, null, ['class' => 'mr-1']) !!}
                             {{$role->name}} 
                         </label>
                     </div>
